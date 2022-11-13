@@ -1,6 +1,7 @@
 package com.crud.crudapi.services;
 
 import com.crud.crudapi.dtos.UserDto;
+import com.crud.crudapi.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class UsersService {
     public UserDto getUserById(String id) {
         return this.usersList.stream()
                 .filter(user -> id.equals(user.getId()))
-                .findAny()
-                .orElse(null);
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + id));
     }
 }

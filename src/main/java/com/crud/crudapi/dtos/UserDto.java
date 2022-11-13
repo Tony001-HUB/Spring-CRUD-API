@@ -1,27 +1,27 @@
 package com.crud.crudapi.dtos;
 
 public class UserDto {
-    private String id;
-    private String name;
+    private String _id;
+    private String _name;
 
     public UserDto(String id, String name) {
-        this.id = id;
-        this.name = name;
+        _id = id;
+        _name = name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this._name = name;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public String getName() {
-        return name;
+        return _name;
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 }
