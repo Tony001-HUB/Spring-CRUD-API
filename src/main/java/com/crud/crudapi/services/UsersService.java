@@ -1,11 +1,12 @@
 package com.crud.crudapi.services;
 
 import com.crud.crudapi.dtos.UserDto;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class UsersService {
     public List<UserDto> usersList = new ArrayList<>() {{
         add(new UserDto("1", "Borys"));

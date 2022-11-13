@@ -4,14 +4,15 @@ import com.crud.crudapi.dtos.UserDto;
 import org.springframework.web.bind.annotation.*;
 import com.crud.crudapi.services.UsersService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
 @RequestMapping("users")
 public class UsersController {
     public UsersService usersService;
-
+    public UsersController(UsersService usersService) {
+        this.usersService = usersService;
+    }
     @GetMapping
     public List<UserDto> getUsersList() {
         return this.usersService.getUsersList();
