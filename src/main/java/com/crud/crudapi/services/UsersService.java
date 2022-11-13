@@ -32,4 +32,12 @@ public class UsersService {
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with name:" + name));
     }
+
+    public boolean deleteUser(String id) {
+        UserDto foundUser = this.usersList.stream()
+                .filter(user -> id.equals(user.getId()))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + id));
+        return this.usersList.remove(foundUser);
+    }
 }

@@ -38,4 +38,8 @@ public class UsersController {
         return this.usersService.getUserByName(name);
     }
 
+    @DeleteMapping("{id}")
+    public boolean deleteUser(@PathVariable String id) {
+        return this.usersService.deleteUser(id);
+    }
 }
