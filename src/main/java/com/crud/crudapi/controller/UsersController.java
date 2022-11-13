@@ -48,4 +48,9 @@ public class UsersController {
     public UserDto createUser(@RequestBody UserDto user) {
         return this.usersService.createUser(user);
     }
+
+    @PutMapping()
+    public UserDto updateUser(@RequestBody UserDto user) {
+        return this.usersService.updateUser(user);
+    }
 }

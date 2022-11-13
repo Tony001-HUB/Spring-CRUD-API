@@ -47,11 +47,22 @@ public class UsersService {
         UserDto foundUser = this.usersList.stream()
                 .filter(currentUser ->
                         user.getId().equals(currentUser.getId()) ||
-                        user.getName().equals(currentUser.getId())
+                        user.getName().equals(currentUser.getName())
                 ).findFirst().orElse(null);
         if (foundUser != null) {
             throw new ResourceBadRequestException("The user already exists");
         }
+        this.usersList.add(user);
+        return user;
+    }
+
+
+    public UserDto updateUser(UserDto user) {
+        UserDto foundUser = this.usersList.stream()
+                .filter(currentUser -> user.getId().equals(currentUser.getId()))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + user.getId()));
+        this.usersList.remove(foundUser);
         this.usersList.add(user);
         return user;
     }
