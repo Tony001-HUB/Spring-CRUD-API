@@ -1,6 +1,7 @@
 package com.crud.crudapi.controller;
 
 import com.crud.crudapi.dtos.UserDto;
+import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.*;
 import com.crud.crudapi.services.UsersService;
 
@@ -39,7 +40,12 @@ public class UsersController {
     }
 
     @DeleteMapping("{id}")
-    public boolean deleteUser(@PathVariable String id) {
+    public UserDto deleteUser(@PathVariable String id) {
         return this.usersService.deleteUser(id);
+    }
+
+    @PostMapping()
+    public UserDto createUser(@RequestBody UserDto user) {
+        return this.usersService.createUser(user);
     }
 }

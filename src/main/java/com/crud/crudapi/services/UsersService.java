@@ -1,6 +1,7 @@
 package com.crud.crudapi.services;
 
 import com.crud.crudapi.dtos.UserDto;
+import com.crud.crudapi.exception.ResourceBadRequestException;
 import com.crud.crudapi.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +34,25 @@ public class UsersService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with name:" + name));
     }
 
-    public boolean deleteUser(String id) {
+    public UserDto deleteUser(String id) {
         UserDto foundUser = this.usersList.stream()
                 .filter(user -> id.equals(user.getId()))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + id));
-        return this.usersList.remove(foundUser);
+        this.usersList.remove(foundUser);
+        return foundUser;
+    }
+
+    public UserDto createUser(UserDto user) {
+        UserDto foundUser = this.usersList.stream()
+                .filter(currentUser ->
+                        user.getId().equals(currentUser.getId()) ||
+                        user.getName().equals(currentUser.getId())
+                ).findFirst().orElse(null);
+        if (foundUser != null) {
+            throw new ResourceBadRequestException("The user already exists");
+        }
+        this.usersList.add(user);
+        return user;
     }
 }
