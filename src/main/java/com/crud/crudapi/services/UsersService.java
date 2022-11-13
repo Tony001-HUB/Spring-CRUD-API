@@ -25,4 +25,11 @@ public class UsersService {
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + id));
     }
+
+    public UserDto getUserByName(String name) {
+        return this.usersList.stream()
+                .filter(user -> name.equals(user.getName()))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with name:" + name));
+    }
 }

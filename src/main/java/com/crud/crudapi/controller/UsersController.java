@@ -6,6 +6,8 @@ import com.crud.crudapi.services.UsersService;
 
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 @RestController()
 @RequestMapping("users")
 public class UsersController {
@@ -18,8 +20,22 @@ public class UsersController {
         return this.usersService.getUsersList();
     }
 
-    @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable String id) {
+    @RequestMapping(
+            params = { "id" },
+            method = GET
+    )
+    @ResponseBody
+    public UserDto getUserById(@RequestParam("id") String id) {
         return this.usersService.getUserById(id);
     }
+
+    @RequestMapping(
+            params = { "name" },
+            method = GET
+    )
+    @ResponseBody
+    public UserDto getUserByName(@RequestParam("name") String name) {
+        return this.usersService.getUserByName(name);
+    }
+
 }
