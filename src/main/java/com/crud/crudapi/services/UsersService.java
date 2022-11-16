@@ -1,69 +1,42 @@
 package com.crud.crudapi.services;
 
-import com.crud.crudapi.dtos.UserDto;
-import com.crud.crudapi.exception.ResourceBadRequestException;
-import com.crud.crudapi.exception.ResourceNotFoundException;
+import com.crud.crudapi.exception.ResourceServerErrorException;
+import com.crud.crudapi.modal.Person;
+import com.crud.crudapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-
 @Service
 public class UsersService {
-    public List<UserDto> usersList = new ArrayList<>() {{
-        add(new UserDto("1", "Borys"));
-        add(new UserDto("2", "Dima"));
-        add(new UserDto("3", "Max"));
-    }};
+    private final String serverUnavailable = "The server is unavailable";
 
-    public List<UserDto> getUsersList() {
-        return this.usersList;
+    private final UserRepository userRepository;
+
+    public UsersService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public UserDto getUserById(String id) {
-        return this.usersList.stream()
-                .filter(user -> id.equals(user.getId()))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + id));
-    }
-
-    public UserDto getUserByName(String name) {
-        return this.usersList.stream()
-                .filter(user -> name.equals(user.getName()))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with name:" + name));
-    }
-
-    public UserDto deleteUser(String id) {
-        UserDto foundUser = this.usersList.stream()
-                .filter(user -> id.equals(user.getId()))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + id));
-        this.usersList.remove(foundUser);
-        return foundUser;
-    }
-
-    public UserDto createUser(UserDto user) {
-        UserDto foundUser = this.usersList.stream()
-                .filter(currentUser ->
-                        user.getId().equals(currentUser.getId()) ||
-                        user.getName().equals(currentUser.getName())
-                ).findFirst().orElse(null);
-        if (foundUser != null) {
-            throw new ResourceBadRequestException("The user already exists");
+    public List<Person> getAllUsers() {
+        try {
+            return this.userRepository.findAll();
+        } catch (Exception  e) {
+            throw new ResourceServerErrorException(this.serverUnavailable);
         }
-        this.usersList.add(user);
-        return user;
     }
 
+    public Person getUserByName(String name) {
+        try {
+            return this.userRepository.findByName(name);
+        } catch (Exception  e) {
+            throw new ResourceServerErrorException(this.serverUnavailable);
+        }
+    }
 
-    public UserDto updateUser(UserDto user) {
-        UserDto foundUser = this.usersList.stream()
-                .filter(currentUser -> user.getId().equals(currentUser.getId()))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id:" + user.getId()));
-        this.usersList.remove(foundUser);
-        this.usersList.add(user);
-        return user;
+    public Person createUser(Person user) {
+        try {
+            return this.userRepository.save(user);
+        } catch (Exception  e) {
+            throw new ResourceServerErrorException(this.serverUnavailable);
+        }
     }
 }
