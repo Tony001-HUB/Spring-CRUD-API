@@ -1,5 +1,7 @@
 package com.crud.crudapi.modal;
 
+import com.crud.crudapi.modal.response.ContactDto;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -10,8 +12,14 @@ public class Person {
     @Column(name = "id", nullable = false)
     private Long id;
     @NotBlank
+    @Column
     private String name;
+    @Column
     private String info;
+
+    @OneToOne (optional=false, cascade=CascadeType.ALL)
+    @JoinColumn (name="contact_id")
+    private Contact contact;
 
     public Person() {
     }
@@ -43,5 +51,17 @@ public class Person {
 
     public Long getId() {
         return id;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public ContactDto getContactDto() {
+        return new ContactDto(this.contact.getPhoneNumber(), this.contact.getAddress());
     }
 }

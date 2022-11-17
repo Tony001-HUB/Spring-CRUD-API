@@ -1,8 +1,9 @@
 package com.crud.crudapi.services;
 
+import com.crud.crudapi.constants.ConstantsHelper;
 import com.crud.crudapi.exception.ResourceServerErrorException;
 import com.crud.crudapi.modal.Person;
-import com.crud.crudapi.modal.response.PersonResponse;
+import com.crud.crudapi.modal.response.PersonDto;
 import com.crud.crudapi.repository.PersonRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,21 +13,27 @@ import java.util.List;
 
 @Service
 public class PersonService {
-    private final String serverUnavailable = "The server is unavailable";
-
     private final PersonRepository personRepository;
 
     public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
-    public List<PersonResponse> getAllUsers() {
+    public List<PersonDto> getAllUsers() {
         try {
-            ArrayList<PersonResponse> personResponses = new ArrayList<>();
-            personRepository.findAll().forEach(person -> personResponses.add(new PersonResponse(person.getId(), person.getName(), person.getInfo())));
-            return personResponses;
+            ArrayList<PersonDto> personResponse = new ArrayList<>();
+            personRepository.findAll().forEach(person ->
+                    personResponse.add(
+                            new PersonDto(
+                                    person.getId(),
+                                    person.getName(),
+                                    person.getInfo(),
+                                    person.getContactDto()
+                            ))
+                    );
+            return personResponse;
         } catch (Exception e) {
-            throw new ResourceServerErrorException(this.serverUnavailable);
+            throw new ResourceServerErrorException(ConstantsHelper.serverUnavailable);
         }
     }
 
@@ -34,7 +41,7 @@ public class PersonService {
         try {
             return this.personRepository.findByName(name);
         } catch (Exception e) {
-            throw new ResourceServerErrorException(this.serverUnavailable);
+            throw new ResourceServerErrorException(ConstantsHelper.serverUnavailable);
         }
     }
 
@@ -42,7 +49,7 @@ public class PersonService {
         try {
             return this.personRepository.save(person);
         } catch (Exception e) {
-            throw new ResourceServerErrorException(this.serverUnavailable);
+            throw new ResourceServerErrorException(ConstantsHelper.serverUnavailable);
         }
     }
 
@@ -51,7 +58,7 @@ public class PersonService {
             this.personRepository.deleteById(id);
             return HttpStatus.OK;
         } catch (Exception e) {
-            throw new ResourceServerErrorException(this.serverUnavailable);
+            throw new ResourceServerErrorException(ConstantsHelper.serverUnavailable);
         }
     }
 }

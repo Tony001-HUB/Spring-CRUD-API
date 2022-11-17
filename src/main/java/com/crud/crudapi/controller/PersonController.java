@@ -2,7 +2,7 @@ package com.crud.crudapi.controller;
 
 import com.crud.crudapi.exception.ResourceBadRequestException;
 import com.crud.crudapi.modal.Person;
-import com.crud.crudapi.modal.response.PersonResponse;
+import com.crud.crudapi.modal.response.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class PersonController {
         this.personService = personService;
     }
     @GetMapping
-    public ResponseEntity<List<PersonResponse>> getUsersList() {
+    public ResponseEntity<List<PersonDto>> getUsersList() {
         return new ResponseEntity<>(personService.getAllUsers(), HttpStatus.OK);
     }
 
