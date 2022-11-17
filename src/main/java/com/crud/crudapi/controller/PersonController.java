@@ -2,43 +2,49 @@ package com.crud.crudapi.controller;
 
 import com.crud.crudapi.exception.ResourceBadRequestException;
 import com.crud.crudapi.modal.Person;
+import com.crud.crudapi.modal.response.PersonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.crud.crudapi.services.UsersService;
+import com.crud.crudapi.services.PersonService;
 
 import java.util.List;
 
 @RestController()
 @RequestMapping("v1/managers")
-public class UsersController {
+public class PersonController {
 
-    public UsersService usersService;
+    public PersonService personService;
     @Autowired
-    public UsersController(UsersService usersService) {
-        this.usersService = usersService;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
     }
     @GetMapping
-    public ResponseEntity<List<Person>> getUsersList() {
-        return new ResponseEntity<>(usersService.getAllUsers(), HttpStatus.OK);
+    public ResponseEntity<List<PersonResponse>> getUsersList() {
+        return new ResponseEntity<>(personService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("{name}")
     public  ResponseEntity<Person> getUserByName(@PathVariable String name) {
-        return new ResponseEntity<>(usersService.getUserByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(personService.getUserByName(name), HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<Person> createUser(@RequestBody Person user) {
-        if (user.getName() == null || user.getName().equals("")) {
+    public ResponseEntity<Person> createUser(@RequestBody Person person) {
+        if (person.getName() == null || person.getName().equals("")) {
             throw new ResourceBadRequestException("Name may not be blank");
         }
-        return new ResponseEntity<>(usersService.createUser(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(personService.createUser(person), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<HttpStatus> deleteUserById(@PathVariable String id) {
+        return new ResponseEntity<>(personService.deleteUser(id), HttpStatus.OK);
     }
 
     /*
-        @RequestMapping(
+    @RequestMapping(
             params = { "id" },
             method = GET
     )
