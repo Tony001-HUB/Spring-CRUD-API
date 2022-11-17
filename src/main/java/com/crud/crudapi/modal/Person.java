@@ -60,8 +60,4 @@ public class Person {
     public void setContact(Contact contact) {
         this.contact = contact;
     }
-
-    public ContactDto getContactDto() {
-        return new ContactDto(this.contact.getPhoneNumber(), this.contact.getAddress());
-    }
 }

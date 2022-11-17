@@ -3,6 +3,7 @@ package com.crud.crudapi.services;
 import com.crud.crudapi.constants.ConstantsHelper;
 import com.crud.crudapi.exception.ResourceServerErrorException;
 import com.crud.crudapi.modal.Person;
+import com.crud.crudapi.modal.response.ContactDto;
 import com.crud.crudapi.modal.response.PersonDto;
 import com.crud.crudapi.repository.PersonRepository;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class PersonService {
                                     person.getId(),
                                     person.getName(),
                                     person.getInfo(),
-                                    person.getContactDto()
+                                    new ContactDto(person.getContact().getPhoneNumber(), person.getContact().getAddress())
                             ))
                     );
             return personResponse;
