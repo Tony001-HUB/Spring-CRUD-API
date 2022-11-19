@@ -1,6 +1,8 @@
 package com.crud.crudapi.controller;
 
+import com.crud.crudapi.constants.ConstantsHelper;
 import com.crud.crudapi.exception.ResourceBadRequestException;
+import com.crud.crudapi.exception.ResourceServerErrorException;
 import com.crud.crudapi.modal.Person;
 import com.crud.crudapi.modal.response.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class PersonController {
         this.personService = personService;
     }
     @GetMapping
-    public ResponseEntity<List<PersonDto>> getUsersList() {
+    public ResponseEntity<List<Person>> getUsersList() {
         return new ResponseEntity<>(personService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -41,6 +43,17 @@ public class PersonController {
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable String id) {
         return new ResponseEntity<>(personService.deleteUser(id), HttpStatus.OK);
+    }
+
+    @PutMapping()
+    public ResponseEntity<Person> addCompanyToUser(
+            @RequestParam(value = "personId") Long personId,
+            @RequestParam(value = "companyId") Long companyId
+    ) {
+        if (personId == null || companyId == null) {
+            throw new ResourceServerErrorException(ConstantsHelper.emptyCompanyOrUserId);
+        }
+        return new ResponseEntity<>(personService.addCompanyToUser(personId, companyId), HttpStatus.OK);
     }
 
     /*

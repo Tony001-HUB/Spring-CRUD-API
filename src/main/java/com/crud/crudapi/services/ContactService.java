@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ContactService {
-    private final String serverUnavailable = "The server is unavailable";
     private final ContactRepository contactRepository;
 
     public ContactService(ContactRepository contactRepository) {

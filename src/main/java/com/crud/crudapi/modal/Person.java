@@ -21,8 +21,10 @@ public class Person {
     @JoinColumn (name="contact_id")
     private Contact contact;
 
-    public Person() {
-    }
+    @ManyToOne (cascade=CascadeType.ALL)
+    @JoinColumn (name="company_id")
+    private Company company;
+    public Person() {}
 
     public Person(String title, String text) {
         this.name = title;
@@ -59,5 +61,13 @@ public class Person {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }
